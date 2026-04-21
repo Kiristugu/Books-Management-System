@@ -42,23 +42,20 @@ public class BookDao {
         final ArrayList<Book> books=new ArrayList<Book>();
         jdbcTemplate.query(QUERY_BOOK_SQL, new Object[]{swcx,swcx}, new RowCallbackHandler() {
             public void processRow(ResultSet resultSet) throws SQLException {
-                resultSet.beforeFirst();
-                while (resultSet.next()){
-                    Book book =new Book();
-                    book.setAuthor(resultSet.getString("author"));
-                    book.setBookId(resultSet.getLong("book_id"));
-                    book.setClassId(resultSet.getInt("class_id"));
-                    book.setIntroduction(resultSet.getString("introduction"));
-                    book.setIsbn(resultSet.getString("isbn"));
-                    book.setLanguage(resultSet.getString("language"));
-                    book.setName(resultSet.getString("name"));
-                    book.setPressmark(resultSet.getInt("pressmark"));
-                    book.setPubdate(resultSet.getDate("pubdate"));
-                    book.setPrice(resultSet.getBigDecimal("price"));
-                    book.setState(resultSet.getInt("state"));
-                    book.setPublish(resultSet.getString("publish"));
-                    books.add(book);
-                }
+                Book book =new Book();
+                book.setAuthor(resultSet.getString("author"));
+                book.setBookId(resultSet.getLong("book_id"));
+                book.setClassId(resultSet.getInt("class_id"));
+                book.setIntroduction(resultSet.getString("introduction"));
+                book.setIsbn(resultSet.getString("isbn"));
+                book.setLanguage(resultSet.getString("language"));
+                book.setName(resultSet.getString("name"));
+                book.setPressmark(resultSet.getInt("pressmark"));
+                book.setPubdate(resultSet.getDate("pubdate"));
+                book.setPrice(resultSet.getBigDecimal("price"));
+                book.setState(resultSet.getInt("state"));
+                book.setPublish(resultSet.getString("publish"));
+                books.add(book);
 
             }
         });
@@ -70,23 +67,20 @@ public class BookDao {
 
         jdbcTemplate.query(QUERY_ALL_BOOKS_SQL, new RowCallbackHandler() {
             public void processRow(ResultSet resultSet) throws SQLException {
-                resultSet.beforeFirst();
-                    while (resultSet.next()){
-                        Book book =new Book();
-                        book.setPrice(resultSet.getBigDecimal("price"));
-                        book.setState(resultSet.getInt("state"));
-                        book.setPublish(resultSet.getString("publish"));
-                        book.setPubdate(resultSet.getDate("pubdate"));
-                        book.setName(resultSet.getString("name"));
-                        book.setIsbn(resultSet.getString("isbn"));
-                        book.setClassId(resultSet.getInt("class_id"));
-                        book.setBookId(resultSet.getLong("book_id"));
-                        book.setAuthor(resultSet.getString("author"));
-                        book.setIntroduction(resultSet.getString("introduction"));
-                        book.setPressmark(resultSet.getInt("pressmark"));
-                        book.setLanguage(resultSet.getString("language"));
-                        books.add(book);
-                    }
+                Book book =new Book();
+                book.setPrice(resultSet.getBigDecimal("price"));
+                book.setState(resultSet.getInt("state"));
+                book.setPublish(resultSet.getString("publish"));
+                book.setPubdate(resultSet.getDate("pubdate"));
+                book.setName(resultSet.getString("name"));
+                book.setIsbn(resultSet.getString("isbn"));
+                book.setClassId(resultSet.getInt("class_id"));
+                book.setBookId(resultSet.getLong("book_id"));
+                book.setAuthor(resultSet.getString("author"));
+                book.setIntroduction(resultSet.getString("introduction"));
+                book.setPressmark(resultSet.getInt("pressmark"));
+                book.setLanguage(resultSet.getString("language"));
+                books.add(book);
             }
         });
         return books;

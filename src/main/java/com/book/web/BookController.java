@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @Controller
 public class BookController {
+    private static final int NAME_MAX_LEN = 50;
+    private static final int AUTHOR_MAX_LEN = 50;
+    private static final int PUBLISH_MAX_LEN = 30;
+    private static final int ISBN_MAX_LEN = 13;
+    private static final int LANGUAGE_MAX_LEN = 10;
+
     private BookService bookService;
 
     @Autowired
@@ -84,6 +89,11 @@ public class BookController {
 
     @RequestMapping("/book_add_do.html")
     public String addBookDo(BookAddCommand bookAddCommand,RedirectAttributes redirectAttributes){
+        String lengthError = validateBookTextLength(bookAddCommand);
+        if (lengthError != null) {
+            redirectAttributes.addFlashAttribute("error", lengthError);
+            return "redirect:/book_add.html";
+        }
         Book book=new Book();
         book.setBookId(0);
         book.setPrice(bookAddCommand.getPrice());
@@ -100,7 +110,6 @@ public class BookController {
 
 
         boolean succ=bookService.addBook(book);
-        ArrayList<Book> books=bookService.getAllBooks();
         if (succ){
             redirectAttributes.addFlashAttribute("succ", "图书添加成功！");
             return "redirect:/allbooks.html";
@@ -122,6 +131,11 @@ public class BookController {
 
     @RequestMapping("/book_edit_do.html")
     public String bookEditDo(HttpServletRequest request,BookAddCommand bookAddCommand,RedirectAttributes redirectAttributes){
+        String lengthError = validateBookTextLength(bookAddCommand);
+        if (lengthError != null) {
+            redirectAttributes.addFlashAttribute("error", lengthError);
+            return "redirect:/updatebook.html?bookId=" + request.getParameter("id");
+        }
         long bookId=Integer.parseInt( request.getParameter("id"));
         Book book=new Book();
         book.setBookId(bookId);
@@ -168,6 +182,29 @@ public class BookController {
         ModelAndView modelAndView=new ModelAndView("reader_book_detail");
         modelAndView.addObject("detail",book);
         return modelAndView;
+    }
+
+    private String validateBookTextLength(BookAddCommand cmd) {
+        if (isTooLong(cmd.getName(), NAME_MAX_LEN)) {
+            return "书名过长，最多 " + NAME_MAX_LEN + " 个字符。";
+        }
+        if (isTooLong(cmd.getAuthor(), AUTHOR_MAX_LEN)) {
+            return "作者过长，最多 " + AUTHOR_MAX_LEN + " 个字符。";
+        }
+        if (isTooLong(cmd.getPublish(), PUBLISH_MAX_LEN)) {
+            return "出版社过长，最多 " + PUBLISH_MAX_LEN + " 个字符。";
+        }
+        if (isTooLong(cmd.getIsbn(), ISBN_MAX_LEN)) {
+            return "ISBN 过长，最多 " + ISBN_MAX_LEN + " 个字符。";
+        }
+        if (isTooLong(cmd.getLanguage(), LANGUAGE_MAX_LEN)) {
+            return "语言字段过长，最多 " + LANGUAGE_MAX_LEN + " 个字符。";
+        }
+        return null;
+    }
+
+    private boolean isTooLong(String value, int maxLen) {
+        return value != null && value.length() > maxLen;
     }
 
 

@@ -2,11 +2,9 @@ package com.book.web;
 
 import com.book.domain.Admin;
 import com.book.domain.ReaderCard;
-import com.book.domain.ReaderInfo;
 import com.book.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -94,6 +92,10 @@ public class LoginController {
     public String reAdminPasswdDo(HttpServletRequest request,String oldPasswd,String newPasswd,String reNewPasswd,RedirectAttributes redirectAttributes ) {
 
         Admin admin=(Admin) request.getSession().getAttribute("admin");
+        if (admin == null) {
+            redirectAttributes.addFlashAttribute("error", "登录已失效，请重新登录后再修改密码！");
+            return "redirect:/login.html";
+        }
         int id=admin.getAdminId();
         String passwd=loginService.getAdminPasswd(id);
 

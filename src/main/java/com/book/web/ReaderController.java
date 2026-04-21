@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,6 +63,9 @@ public class ReaderController {
     @RequestMapping("/reader_info.html")
     public ModelAndView toReaderInfo(HttpServletRequest request) {
         ReaderCard readerCard=(ReaderCard) request.getSession().getAttribute("readercard");
+        if (readerCard == null) {
+            return new ModelAndView("redirect:/login.html");
+        }
         ReaderInfo readerInfo=readerInfoService.getReaderInfo(readerCard.getReaderId());
         ModelAndView modelAndView=new ModelAndView("reader_info");
         modelAndView.addObject("readerinfo",readerInfo);
@@ -155,6 +157,10 @@ public class ReaderController {
     @RequestMapping("reader_repasswd_do.html")
     public String readerRePasswdDo(HttpServletRequest request,String oldPasswd,String newPasswd,String reNewPasswd,RedirectAttributes redirectAttributes){
         ReaderCard readerCard=(ReaderCard) request.getSession().getAttribute("readercard");
+        if (readerCard == null) {
+            redirectAttributes.addFlashAttribute("error", "登录已失效，请重新登录后再修改密码！");
+            return "redirect:/login.html";
+        }
         int readerId=readerCard.getReaderId();
         String passwd=readerCard.getPasswd();
 
@@ -207,7 +213,6 @@ public class ReaderController {
         readerInfo.setSex(sex);
         boolean succ=readerInfoService.addReaderInfo(readerInfo);
         boolean succc=readerCardService.addReaderCard(readerInfo);
-        ArrayList<ReaderInfo> readers=readerInfoService.readerInfos();
         if (succ&&succc){
             redirectAttributes.addFlashAttribute("succ", "添加读者信息成功！");
             return "redirect:/allreaders.html";
@@ -220,6 +225,9 @@ public class ReaderController {
     @RequestMapping("reader_info_edit.html")
     public ModelAndView readerInfoEditReader(HttpServletRequest request){
         ReaderCard readerCard=(ReaderCard) request.getSession().getAttribute("readercard");
+        if (readerCard == null) {
+            return new ModelAndView("redirect:/login.html");
+        }
         ReaderInfo readerInfo=readerInfoService.getReaderInfo(readerCard.getReaderId());
         ModelAndView modelAndView=new ModelAndView("reader_info_edit");
         modelAndView.addObject("readerinfo",readerInfo);
@@ -229,6 +237,10 @@ public class ReaderController {
     @RequestMapping("reader_edit_do_r.html")
     public String readerInfoEditDoReader(HttpServletRequest request,String name,String sex,String birth,String address,String telcode,RedirectAttributes redirectAttributes){
         ReaderCard readerCard=(ReaderCard) request.getSession().getAttribute("readercard");
+        if (readerCard == null) {
+            redirectAttributes.addFlashAttribute("error", "登录已失效，请重新登录后再修改信息！");
+            return "redirect:/login.html";
+        }
         if (!readerCard.getName().equals(name)){
             boolean succo=readerCardService.updateName(readerCard.getReaderId(),name);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");

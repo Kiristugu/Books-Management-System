@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 import com.book.domain.Lend;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -53,16 +52,13 @@ public class LendDao {
 
         jdbcTemplate.query(LEND_LIST_SQL, new RowCallbackHandler() {
             public void processRow(ResultSet resultSet) throws SQLException {
-                resultSet.beforeFirst();
-                while (resultSet.next()){
-                    Lend lend=new Lend();
-                    lend.setBackDate(resultSet.getDate("back_date"));
-                    lend.setBookId(resultSet.getLong("book_id"));
-                    lend.setLendDate(resultSet.getDate("lend_date"));
-                    lend.setReaderId(resultSet.getInt("reader_id"));
-                    lend.setSernum(resultSet.getLong("sernum"));
-                    list.add(lend);
-                }
+                Lend lend=new Lend();
+                lend.setBackDate(resultSet.getDate("back_date"));
+                lend.setBookId(resultSet.getLong("book_id"));
+                lend.setLendDate(resultSet.getDate("lend_date"));
+                lend.setReaderId(resultSet.getInt("reader_id"));
+                lend.setSernum(resultSet.getLong("sernum"));
+                list.add(lend);
             }
         });
         return list;
@@ -73,16 +69,13 @@ public class LendDao {
 
         jdbcTemplate.query(MY_LEND_LIST_SQL, new Object[]{readerId},new RowCallbackHandler() {
             public void processRow(ResultSet resultSet) throws SQLException {
-                resultSet.beforeFirst();
-                while (resultSet.next()){
-                    Lend lend=new Lend();
-                    lend.setBackDate(resultSet.getDate("back_date"));
-                    lend.setBookId(resultSet.getLong("book_id"));
-                    lend.setLendDate(resultSet.getDate("lend_date"));
-                    lend.setReaderId(resultSet.getInt("reader_id"));
-                    lend.setSernum(resultSet.getLong("sernum"));
-                    list.add(lend);
-                }
+                Lend lend=new Lend();
+                lend.setBackDate(resultSet.getDate("back_date"));
+                lend.setBookId(resultSet.getLong("book_id"));
+                lend.setLendDate(resultSet.getDate("lend_date"));
+                lend.setReaderId(resultSet.getInt("reader_id"));
+                lend.setSernum(resultSet.getLong("sernum"));
+                list.add(lend);
             }
         });
         return list;

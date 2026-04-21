@@ -75,6 +75,9 @@ public class LendController {
     @RequestMapping("/mylend.html")
     public ModelAndView myLend(HttpServletRequest request){
         ReaderCard readerCard=(ReaderCard) request.getSession().getAttribute("readercard");
+        if (readerCard == null) {
+            return new ModelAndView("redirect:/login.html");
+        }
         ModelAndView modelAndView=new ModelAndView("reader_lend_list");
         modelAndView.addObject("list",lendService.myLendList(readerCard.getReaderId()));
         return modelAndView;

@@ -27,17 +27,14 @@ public class ReaderInfoDao {
         final ArrayList<ReaderInfo> readers=new ArrayList<ReaderInfo>();
         jdbcTemplate.query(ALL_READER_INFO_SQL, new RowCallbackHandler() {
             public void processRow(ResultSet resultSet) throws SQLException {
-                resultSet.beforeFirst();
-                while (resultSet.next()){
-                    ReaderInfo reader=new ReaderInfo();
-                    reader.setAddress(resultSet.getString("address"));
-                    reader.setBirth(resultSet.getDate("birth"));
-                    reader.setName(resultSet.getString("name"));
-                    reader.setReaderId(resultSet.getInt("reader_id"));
-                    reader.setSex(resultSet.getString("sex"));
-                    reader.setTelcode(resultSet.getString("telcode"));
-                    readers.add(reader);
-                }
+                ReaderInfo reader=new ReaderInfo();
+                reader.setAddress(resultSet.getString("address"));
+                reader.setBirth(resultSet.getDate("birth"));
+                reader.setName(resultSet.getString("name"));
+                reader.setReaderId(resultSet.getInt("reader_id"));
+                reader.setSex(resultSet.getString("sex"));
+                reader.setTelcode(resultSet.getString("telcode"));
+                readers.add(reader);
             }
         });
         return readers;
