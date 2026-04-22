@@ -90,6 +90,12 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.224</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -115,6 +121,27 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Eclipse Jetty 10：内置 JSP 引擎可在 JDK 17/21 下编译 JSP；Mortbay Jetty 6 过旧会 500 -->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
